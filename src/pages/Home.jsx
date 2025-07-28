@@ -1,72 +1,85 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Calendar, MapPin, Search, User, Clock, ArrowRight } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Calendar,
+  MapPin,
+  Search,
+  User,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 
 export function Home() {
-  const [posts, setPosts] = useState([])
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [error, setError] = useState(null)
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
       const [postsResponse, usersResponse] = await Promise.all([
         fetch("https://sumeetapi.onrender.com/api/posts"),
         fetch("https://sumeetapi.onrender.com/api/users"),
-      ])
+      ]);
 
       if (!postsResponse.ok || !usersResponse.ok) {
-        throw new Error("Failed to fetch data")
+        throw new Error("Failed to fetch data");
       }
 
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
+      const postsData = await postsResponse.json();
+      const usersData = await usersResponse.json();
 
-      const postAuthorMap = {}
+      const postAuthorMap = {};
       usersData.forEach((user) => {
         user.posts.forEach((postId) => {
-          postAuthorMap[postId] = user.name
-        })
-      })
+          postAuthorMap[postId] = user.name;
+        });
+      });
 
       const postsWithAuthors = postsData.map((post) => ({
         ...post,
         author: postAuthorMap[post.id] || "Unknown Author",
-      }))
+      }));
 
-      setPosts(postsWithAuthors)
-      setUsers(usersData)
+      setPosts(postsWithAuthors);
+      setUsers(usersData);
     } catch (err) {
-      setError("Failed to load posts. Please try again later.")
-      console.error("Error fetching data:", err)
+      setError("Failed to load posts. Please try again later.");
+      console.error("Error fetching data:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filteredPosts = posts.filter(
     (post) =>
       post.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.desc?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.author?.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      post.author?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const featuredPost = filteredPosts[0]
-  const regularPosts = filteredPosts.slice(1)
+  const featuredPost = filteredPosts[0];
+  const regularPosts = filteredPosts.slice(1);
 
   if (loading) {
     return (
-      <div className="bg-white">
+      <div className="h-full min-w-full">
         {/* Hero Section Skeleton */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
           <div className="w-full px-6 py-20">
@@ -85,19 +98,25 @@ export function Home() {
               <div className="h-96 bg-gray-200 rounded-xl animate-pulse mb-8"></div>
               <div className="grid gap-6 md:grid-cols-2">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-80 bg-gray-200 rounded-xl animate-pulse"></div>
+                  <div
+                    key={i}
+                    className="h-80 bg-gray-200 rounded-xl animate-pulse"
+                  ></div>
                 ))}
               </div>
             </div>
             <div className="space-y-6">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-32 bg-gray-200 rounded-xl animate-pulse"></div>
+                <div
+                  key={i}
+                  className="h-32 bg-gray-200 rounded-xl animate-pulse"
+                ></div>
               ))}
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -106,19 +125,24 @@ export function Home() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
           <div className="w-full px-6 py-20 text-center">
             <h1 className="text-5xl font-bold mb-6">Welcome to TravelBlog</h1>
-            <p className="text-xl mb-8 opacity-90">Discover amazing stories from around the world</p>
+            <p className="text-xl mb-8 opacity-90">
+              Discover amazing stories from around the world
+            </p>
           </div>
         </div>
         <div className="w-full px-6 py-16 text-center">
           <div className="bg-red-50 border border-red-200 rounded-xl p-8 max-w-md mx-auto">
             <p className="text-red-600 mb-4">{error}</p>
-            <Button onClick={fetchData} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={fetchData}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Try Again
             </Button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -127,9 +151,12 @@ export function Home() {
       <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
         <div className="w-full px-6 py-20">
           <div className="text-center">
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6">Welcome to TravelBlog</h1>
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+              Welcome to TravelBlog
+            </h1>
             <p className="text-xl lg:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
-              Discover amazing stories, travel guides, and insights from around the world
+              Discover amazing stories, travel guides, and insights from around
+              the world
             </p>
 
             {/* Hero Search */}
@@ -154,7 +181,9 @@ export function Home() {
             <div className="text-gray-400 mb-4">
               <Search className="h-16 w-16 mx-auto" />
             </div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-2">No posts found</h3>
+            <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+              No posts found
+            </h3>
             <p className="text-gray-600">Try adjusting your search terms</p>
           </div>
         ) : (
@@ -165,7 +194,9 @@ export function Home() {
               {featuredPost && (
                 <div className="mb-12">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold text-gray-900">Featured Story</h2>
+                    <h2 className="text-3xl font-bold text-gray-900">
+                      Featured Story
+                    </h2>
                     <div className="h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded flex-1 ml-6"></div>
                   </div>
 
@@ -186,12 +217,18 @@ export function Home() {
                             {new Date(featuredPost.date).toLocaleDateString()}
                           </span>
                         </div>
-                        <CardTitle className="text-2xl mb-4 leading-tight">{featuredPost.title}</CardTitle>
-                        <p className="text-gray-600 mb-6 line-clamp-3">{featuredPost.desc}</p>
+                        <CardTitle className="text-2xl mb-4 leading-tight">
+                          {featuredPost.title}
+                        </CardTitle>
+                        <p className="text-gray-600 mb-6 line-clamp-3">
+                          {featuredPost.desc}
+                        </p>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
                             <User className="h-4 w-4 text-gray-400" />
-                            <span className="text-gray-700 font-medium">{featuredPost.author}</span>
+                            <span className="text-gray-700 font-medium">
+                              {featuredPost.author}
+                            </span>
                           </div>
                           <Link to={`/post/${featuredPost.id}`}>
                             <Button className="bg-blue-600 hover:bg-blue-700">
@@ -209,7 +246,9 @@ export function Home() {
               {regularPosts.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Latest Stories</h2>
+                    <h2 className="text-3xl font-bold text-gray-900">
+                      Latest Stories
+                    </h2>
                     <div className="h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded flex-1 ml-6"></div>
                   </div>
 
@@ -241,7 +280,9 @@ export function Home() {
                           </CardDescription>
                         </CardHeader>
                         <CardContent className="pt-0">
-                          <p className="text-gray-600 line-clamp-3 mb-4">{post.desc}</p>
+                          <p className="text-gray-600 line-clamp-3 mb-4">
+                            {post.desc}
+                          </p>
                           <Link to={`/post/${post.id}`}>
                             <Button
                               variant="outline"
@@ -276,13 +317,21 @@ export function Home() {
                           {user.name?.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 truncate">{user.name}</p>
-                          <p className="text-sm text-gray-500">{user.posts.length} posts</p>
+                          <p className="font-medium text-gray-900 truncate">
+                            {user.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {user.posts.length} posts
+                          </p>
                         </div>
                       </div>
                     ))}
                     <Link to="/authors">
-                      <Button variant="outline" size="sm" className="w-full mt-4 bg-transparent">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full mt-4 bg-transparent"
+                      >
                         View All Authors
                       </Button>
                     </Link>
@@ -293,12 +342,19 @@ export function Home() {
                 <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-purple-50">
                   <CardHeader>
                     <CardTitle className="text-xl">Stay Updated</CardTitle>
-                    <CardDescription>Get the latest travel stories delivered to your inbox</CardDescription>
+                    <CardDescription>
+                      Get the latest travel stories delivered to your inbox
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <Input placeholder="Enter your email" className="bg-white" />
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700">Subscribe</Button>
+                      <Input
+                        placeholder="Enter your email"
+                        className="bg-white"
+                      />
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                        Subscribe
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -308,5 +364,5 @@ export function Home() {
         )}
       </div>
     </div>
-  )
+  );
 }

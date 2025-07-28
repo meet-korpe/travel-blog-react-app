@@ -1,25 +1,34 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft, Calendar, MapPin, Phone, Mail, Clock, Share2, BookOpen } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowLeft,
+  Calendar,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Share2,
+  BookOpen,
+} from "lucide-react";
 
 export function PostDetail() {
-  const { id } = useParams()
-  const [post, setPost] = useState(null)
-  const [author, setAuthor] = useState(null)
-  const [relatedPosts, setRelatedPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { id } = useParams();
+  const [post, setPost] = useState(null);
+  const [author, setAuthor] = useState(null);
+  const [relatedPosts, setRelatedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (id) {
-      fetchPostAndAuthor(id)
+      fetchPostAndAuthor(id);
     }
-  }, [id])
+  }, [id]);
 
   const fetchPostAndAuthor = async (postId) => {
     try {
@@ -27,33 +36,41 @@ export function PostDetail() {
         fetch(`https://sumeetapi.onrender.com/api/posts/${postId}`),
         fetch("https://sumeetapi.onrender.com/api/users"),
         fetch("https://sumeetapi.onrender.com/api/posts"),
-      ])
+      ]);
 
       if (!postResponse.ok) {
-        throw new Error("Post not found")
+        throw new Error("Post not found");
       }
 
-      const postData = await postResponse.json()
-      const usersData = await usersResponse.json()
-      const allPosts = await postsResponse.json()
+      const postData = await postResponse.json();
+      const usersData = await usersResponse.json();
+      const allPosts = await postsResponse.json();
 
-      const postAuthor = usersData.find((user) => user.posts.includes(Number.parseInt(postId)))
+      const postAuthor = usersData.find((user) =>
+        user.posts.includes(Number.parseInt(postId))
+      );
 
       // Get related posts by same author
       const authorPosts = postAuthor
-        ? allPosts.filter((p) => postAuthor.posts.includes(p.id) && p.id !== Number.parseInt(postId)).slice(0, 3)
-        : []
+        ? allPosts
+            .filter(
+              (p) =>
+                postAuthor.posts.includes(p.id) &&
+                p.id !== Number.parseInt(postId)
+            )
+            .slice(0, 3)
+        : [];
 
-      setPost(postData)
-      setAuthor(postAuthor)
-      setRelatedPosts(authorPosts)
+      setPost(postData);
+      setAuthor(postAuthor);
+      setRelatedPosts(authorPosts);
     } catch (err) {
-      setError("Failed to load post. Please try again later.")
-      console.error("Error fetching post:", err)
+      setError("Failed to load post. Please try again later.");
+      console.error("Error fetching post:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -79,7 +96,7 @@ export function PostDetail() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error || !post) {
@@ -97,7 +114,7 @@ export function PostDetail() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -142,7 +159,9 @@ export function PostDetail() {
                 </span>
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">{post.title}</h1>
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                {post.title}
+              </h1>
 
               {/* Author Info */}
               {author && (
@@ -154,8 +173,12 @@ export function PostDetail() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{author.name}</h3>
-                      <p className="text-sm text-gray-600">Travel Writer • Age {author.age}</p>
+                      <h3 className="font-semibold text-gray-900">
+                        {author.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Travel Writer • Age {author.age}
+                      </p>
                     </div>
                   </div>
                   <Button variant="outline" size="sm">
@@ -180,18 +203,31 @@ export function PostDetail() {
             {/* Related Posts */}
             {relatedPosts.length > 0 && (
               <div className="mt-16 pt-12 border-t">
-                <h3 className="text-2xl font-bold text-gray-900 mb-8">More from {author?.name}</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-8">
+                  More from {author?.name}
+                </h3>
                 <div className="grid gap-6 md:grid-cols-3">
                   {relatedPosts.map((relatedPost) => (
-                    <Card key={relatedPost.id} className="hover:shadow-lg transition-shadow border-0 shadow-md">
+                    <Card
+                      key={relatedPost.id}
+                      className="hover:shadow-lg transition-shadow border-0 shadow-md"
+                    >
                       <div className="h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-t-lg flex items-center justify-center">
                         <BookOpen className="h-8 w-8 text-white" />
                       </div>
                       <CardContent className="p-4">
-                        <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">{relatedPost.title}</h4>
-                        <p className="text-sm text-gray-600 line-clamp-2 mb-3">{relatedPost.desc}</p>
+                        <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                          {relatedPost.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                          {relatedPost.desc}
+                        </p>
                         <Link to={`/post/${relatedPost.id}`}>
-                          <Button variant="outline" size="sm" className="w-full bg-transparent">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full bg-transparent"
+                          >
                             Read More
                           </Button>
                         </Link>
@@ -219,7 +255,9 @@ export function PostDetail() {
                           {author.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <h3 className="font-semibold text-gray-900">{author.name}</h3>
+                      <h3 className="font-semibold text-gray-900">
+                        {author.name}
+                      </h3>
                       <p className="text-sm text-gray-600">Age {author.age}</p>
                     </div>
 
@@ -236,10 +274,15 @@ export function PostDetail() {
 
                     <div className="pt-4 border-t text-center">
                       <p className="text-sm text-gray-600 mb-3">
-                        <strong>{author.posts.length}</strong> articles published
+                        <strong>{author.posts.length}</strong> articles
+                        published
                       </p>
                       <Link to="/authors">
-                        <Button variant="outline" size="sm" className="w-full bg-transparent">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full bg-transparent"
+                        >
                           View Profile
                         </Button>
                       </Link>
@@ -255,7 +298,8 @@ export function PostDetail() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600 mb-4">
-                    Subscribe to get the latest travel stories and tips delivered to your inbox.
+                    Subscribe to get the latest travel stories and tips
+                    delivered to your inbox.
                   </p>
                   <div className="space-y-3">
                     <input
@@ -263,7 +307,9 @@ export function PostDetail() {
                       placeholder="Enter your email"
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">Subscribe</Button>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      Subscribe
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -272,5 +318,5 @@ export function PostDetail() {
         </div>
       </div>
     </div>
-  )
+  );
 }

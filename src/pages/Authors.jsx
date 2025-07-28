@@ -1,43 +1,49 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search, Mail, Phone, FileText, MapPin } from "lucide-react"
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Mail, Phone, FileText, MapPin } from "lucide-react";
 
 export function Authors() {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [error, setError] = useState(null)
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchUsers()
-  }, [])
+    fetchUsers();
+  }, []);
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("https://sumeetapi.onrender.com/api/users")
+      const response = await fetch("https://sumeetapi.onrender.com/api/users");
       if (!response.ok) {
-        throw new Error("Failed to fetch users")
+        throw new Error("Failed to fetch users");
       }
-      const data = await response.json()
-      setUsers(data)
+      const data = await response.json();
+      setUsers(data);
     } catch (err) {
-      setError("Failed to load authors. Please try again later.")
-      console.error("Error fetching users:", err)
+      setError("Failed to load authors. Please try again later.");
+      console.error("Error fetching users:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filteredUsers = users.filter(
     (user) =>
       user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -53,12 +59,15 @@ export function Authors() {
         <div className="w-full px-6 py-16">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-80 bg-gray-200 rounded-xl animate-pulse"></div>
+              <div
+                key={i}
+                className="h-80 bg-gray-200 rounded-xl animate-pulse"
+              ></div>
             ))}
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -67,19 +76,24 @@ export function Authors() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
           <div className="max-w-7xl mx-auto px-6 py-20 text-center">
             <h1 className="text-5xl font-bold mb-4">Our Authors</h1>
-            <p className="text-xl opacity-90">Meet the talented writers behind our stories</p>
+            <p className="text-xl opacity-90">
+              Meet the talented writers behind our stories
+            </p>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 py-16 text-center">
           <div className="bg-red-50 border border-red-200 rounded-xl p-8 max-w-md mx-auto">
             <p className="text-red-600 mb-4">{error}</p>
-            <Button onClick={fetchUsers} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={fetchUsers}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Try Again
             </Button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -90,7 +104,8 @@ export function Authors() {
           <div className="text-center">
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">Our Authors</h1>
             <p className="text-xl lg:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
-              Meet the talented writers and storytellers who bring you amazing content from around the world
+              Meet the talented writers and storytellers who bring you amazing
+              content from around the world
             </p>
 
             {/* Search Bar */}
@@ -115,21 +130,27 @@ export function Authors() {
             <div className="text-gray-400 mb-4">
               <Search className="h-16 w-16 mx-auto" />
             </div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-2">No authors found</h3>
+            <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+              No authors found
+            </h3>
             <p className="text-gray-600">Try adjusting your search terms</p>
           </div>
         ) : (
           <>
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                {filteredUsers.length} Talented {filteredUsers.length === 1 ? "Author" : "Authors"}
+                {filteredUsers.length} Talented{" "}
+                {filteredUsers.length === 1 ? "Author" : "Authors"}
               </h2>
               <div className="h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded w-24 mx-auto"></div>
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredUsers.map((user) => (
-                <Card key={user.name} className="hover:shadow-xl transition-all duration-300 border-0 shadow-lg group">
+                <Card
+                  key={user.name}
+                  className="hover:shadow-xl transition-all duration-300 border-0 shadow-lg group"
+                >
                   <CardHeader className="text-center pb-4">
                     <div className="relative">
                       <Avatar className="w-20 h-20 mx-auto mb-4 ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all">
@@ -145,8 +166,12 @@ export function Authors() {
                         Age {user.age}
                       </div>
                     </div>
-                    <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">{user.name}</CardTitle>
-                    <CardDescription className="text-gray-600">Travel Writer & Storyteller</CardDescription>
+                    <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">
+                      {user.name}
+                    </CardTitle>
+                    <CardDescription className="text-gray-600">
+                      Travel Writer & Storyteller
+                    </CardDescription>
                   </CardHeader>
 
                   <CardContent className="space-y-4">
@@ -174,12 +199,17 @@ export function Authors() {
                         <span className="font-medium">Recent Articles:</span>
                         <div className="mt-1 flex flex-wrap gap-1">
                           {user.posts.slice(0, 4).map((postId, index) => (
-                            <span key={postId} className="bg-gray-100 px-2 py-1 rounded text-xs">
+                            <span
+                              key={postId}
+                              className="bg-gray-100 px-2 py-1 rounded text-xs"
+                            >
                               #{postId}
                             </span>
                           ))}
                           {user.posts.length > 4 && (
-                            <span className="text-gray-400">+{user.posts.length - 4} more</span>
+                            <span className="text-gray-400">
+                              +{user.posts.length - 4} more
+                            </span>
                           )}
                         </div>
                       </div>
@@ -200,5 +230,5 @@ export function Authors() {
         )}
       </div>
     </div>
-  )
+  );
 }

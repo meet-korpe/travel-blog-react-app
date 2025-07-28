@@ -1,14 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { Navigation } from "./components/Navigation"
-import { Home } from "./pages/Home"
-import { PostDetail } from "./pages/PostDetail"
-import { Authors } from "./pages/Authors"
-import { Footer } from "./components/Footer"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Navigation } from "./components/Navigation";
+import { Home } from "./pages/Home";
+import { PostDetail } from "./pages/PostDetail";
+import { Authors } from "./pages/Authors";
+import { Footer } from "./components/Footer";
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen max-w-fullbg-gray-50">
+      <div className="min-h-screen w-[100vw] bg-gray-50">
         <Navigation />
         <main>
           <Routes>
@@ -20,7 +20,7 @@ function App() {
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
