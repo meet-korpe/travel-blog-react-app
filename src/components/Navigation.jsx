@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Link, useLocation } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { MapPin, Home, Users, Menu, Search } from "lucide-react"
-import { useState } from "react"
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { MapPin, Home, Users, Menu, Search } from "lucide-react";
+import { useState } from "react";
 
 export function Navigation() {
-  const location = useLocation()
-  const [isOpen, setIsOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <header className="bg-white shadow-sm border-b sticky top-0 z-50">
@@ -33,8 +33,10 @@ export function Navigation() {
               <MapPin className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">TravelBlog</h1>
-              <p className="text-sm text-gray-500 hidden sm:block">Explore the World</p>
+              <h2 className="text-lg lg:text-2xl font-bold text-gray-900">
+                TravelBlog
+              </h2>
+              <p className="text-sm text-gray-500 ">Explore the World</p>
             </div>
           </Link>
 
@@ -79,9 +81,13 @@ export function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden">
-            <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)}>
-              <Menu className="h-6 w-6" />
+          <div className="lg:hidden text-white">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <Menu className="h-6 w-6 text-white" />
             </Button>
           </div>
         </div>
@@ -93,7 +99,11 @@ export function Navigation() {
               <div className="px-4 pb-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input type="text" placeholder="Search articles..." className="pl-10 w-full" />
+                  <Input
+                    type="text"
+                    placeholder="Search articles..."
+                    className="pl-10 w-full"
+                  />
                 </div>
               </div>
               <Link
@@ -117,5 +127,5 @@ export function Navigation() {
         )}
       </nav>
     </header>
-  )
+  );
 }
